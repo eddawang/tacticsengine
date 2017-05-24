@@ -1,0 +1,41 @@
+body{
+    padding:0;
+    margin:0;
+}
+.mapGrid{
+    display: flex;
+    flex-flow: column;
+}
+
+.tileRow{
+    display: flex;
+    flex-flow: row;
+}
+
+.tile{
+    width: 38px;
+    height: 38px;
+    
+    border: 1px solid red;
+}
+
+.tile[terrain=grass]{
+    width: 38px;
+    height: 38px;
+    
+    border: 1px solid black;
+    background: green;
+}
+
+.tile[terrain=blank]{
+    width: 38px;
+    height: 38px;
+    
+    border: 1px solid black;
+    background: white;
+}
+
+.tile:hover:after{
+    content: var(--loc);
+    z-index: 10;
+}

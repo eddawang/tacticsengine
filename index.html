@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    
+    <head>
+        <title>Test</title>
+        <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+        <script src='tile.js'></script>
+        <link rel="stylesheet" type="text/css" href="index.css">
+    </head>
+    
+    <body>
+        <div class='mapGrid'></div>
+        <script>
+        
+            _map["9,9"].terrain = 'blank';
+            _map["7,7"].terrain = 'asdf';
+            
+            _drawMap('.mapGrid', _map);
+            
+            placeUnit('TESTUNIT', 8,8, _map);
+            
+            function placeUnit(unit, x, y, map){
+                map[getLoc(x,y)].onTile = unit;
+                map.units.push(unit);
+            }
+            
+            function _drawMap(container, map){
+                for(var j=0; j<map.height; j++){
+                    $(container).append(div({class:'tileRow', id:'row'+j}));
+                    for(var i=0; i<map.width; i++){
+                        var t = map[getLoc(i,j)];
+                        divTile('#row'+j,t);
+                    }
+                }
+            }
+            
+            function divTile(selector, tile){
+                if(tile){
+                    var loc = tile.loc;
+                    var terrain = tile.terrain;
+                }else{
+                    var loc = '';
+                    var terrain = 'blank';
+                }
+                $(selector).append(div({class:'tile', id:loc, terrain:terrain}, '', {'--loc':"'"+loc+"'"}));
+            }
+            
+            function div(attrib, content, css){
+                var div = '<div ';
+                for(var i in attrib){
+                    div+=i+'='+attrib[i]+' ';
+                }
+                if(css){
+                    div+='style="';
+                    for(var i in css){
+                        div+=i+':'+css[i]+';';
+                    }
+                    div+='"';
+                }
+                if(!content)
+                    content='';
+                div+='>'+content+'</div>';
+                return div;
+            }
+        </script>
+        
+        <script>
+            
+        </script>
+        
+    </body>
+    
+</html>
