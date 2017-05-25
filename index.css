@@ -2,6 +2,7 @@ body{
     padding:0;
     margin:0;
 }
+
 .mapGrid{
     display: flex;
     flex-flow: column;
@@ -38,4 +39,21 @@ body{
 .tile:hover:after{
     content: var(--loc);
     z-index: 10;
+}
+
+.tile[walk=true]{
+    background: yellow;
+}
+
+.unit{
+    position: absolute;
+    width:36px;
+    height:36px;
+    border: 1px solid blue;
+    border-radius: 50%;
+    z-index: 20;
+}
+
+.unit:checked{
+    background: blue;
 }

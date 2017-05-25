@@ -1,10 +1,10 @@
 //Global Map variable
 var _map = {};
-_map.units = [];
+_map.units = {};
 
 
 //Testing purposes
-_genSquareMap(20,20,_map);
+//_genSquareMap(20,20,_map);
 
 /*
 //Test performance of functions
@@ -148,6 +148,80 @@ function traverseCross(range, tile, target){
                 onTiles.push(u.onTile);
             up = u;
         }
+    }
+    return {tiles: tiles, onTiles: onTiles};
+}
+
+function traverseRadial(range, tile, target){
+    var tiles = [];
+    var onTiles = [];
+    if(target){
+        tiles.push(tile);
+        if(tile.onTile)
+            onTiles.push(tile.onTile);
+    }
+    
+    var left, right, left2, right2, dist;
+    var up = tile;
+    var down = tile;
+
+    while(dist=range--){
+        left = up;
+        right = up;
+        left2 = down;
+        right2 = down;
+        var part = true;
+        if(left==left2)
+            part=false;
+            
+        while(dist--){
+            //traverse horizontally as 'up' traverses upwards
+            var l = left.left;
+            var r = right.right;
+            
+            //traversal
+            if(l){
+                tiles.push(l)
+                if(l.onTile)
+                    onTiles.push(l.onTile);
+                left = l;
+            }
+            if(r){
+                tiles.push(r)
+                if(r.onTile)
+                    onTiles.push(r.onTile);
+                right = r;
+            }
+            
+            //Checks if initial loop
+            if(part){
+                //traverses horizontally as 'down' traverses downwards
+                l = left2.left;
+                r = right2.right;
+            }else{
+                //traverses vertical column for initial loop
+                l = left2.up;
+                r = right2.down;
+            }
+            
+            //traversal
+            if(l){
+                tiles.push(l)
+                if(l.onTile)
+                    onTiles.push(l.onTile);
+                left2 = l;
+            }
+            if(r){
+                tiles.push(r)
+                if(r.onTile)
+                    onTiles.push(r.onTile);
+                right2 = r;
+            }
+        }
+        
+        //traverses 'up' and 'down'
+        up = up.up;
+        down = down.down;
     }
     return {tiles: tiles, onTiles: onTiles};
 }

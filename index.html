@@ -5,6 +5,8 @@
         <title>Test</title>
         <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
         <script src='tile.js'></script>
+        <script src='unit.js'></script>
+        <script src='draw.js'></script>
         <link rel="stylesheet" type="text/css" href="index.css">
     </head>
     
@@ -12,56 +14,47 @@
         <div class='mapGrid'></div>
         <script>
         
+            //Generate map
+            _genSquareMap(20,20,_map);
             _map["9,9"].terrain = 'blank';
             _map["7,7"].terrain = 'asdf';
             
+            //Generate units
+            var unit1 = new unit('A');
+            var unit2 = new unit('B');
+            
+            //Place units on map
+            _placeUnit(unit1, 8,8, _map);
+            _placeUnit(unit2, 10,10, _map);
+            
+            //Draw
             _drawMap('.mapGrid', _map);
+            _drawUnits(_map);
             
-            placeUnit('TESTUNIT', 8,8, _map);
-            
-            function placeUnit(unit, x, y, map){
-                map[getLoc(x,y)].onTile = unit;
-                map.units.push(unit);
-            }
-            
-            function _drawMap(container, map){
-                for(var j=0; j<map.height; j++){
-                    $(container).append(div({class:'tileRow', id:'row'+j}));
-                    for(var i=0; i<map.width; i++){
-                        var t = map[getLoc(i,j)];
-                        divTile('#row'+j,t);
-                    }
+            //Clickers
+            $('.tile').on('click', function(e){
+                if(e.target == this){
+                    var tile = _map[e.target.id];
+                    console.log(tile);
                 }
-            }
+            });
+
+            $('.unit').on('click', function(e){
+                var unit = _map.units[e.target.id];
+                var tile = unit.tile;
+                var walkable = traverseRadial(4, tile, 0).tiles;
+                
+                if(!unit.selected)
+                    unit.selected = true;
+                else
+                    unit.selected = false;
+                
+                for(var i in walkable){
+                    $(idSelect(walkable[i].loc)).attr('walk',unit.selected);
+                }
+                console.log(walkable);
+            });
             
-            function divTile(selector, tile){
-                if(tile){
-                    var loc = tile.loc;
-                    var terrain = tile.terrain;
-                }else{
-                    var loc = '';
-                    var terrain = 'blank';
-                }
-                $(selector).append(div({class:'tile', id:loc, terrain:terrain}, '', {'--loc':"'"+loc+"'"}));
-            }
-            
-            function div(attrib, content, css){
-                var div = '<div ';
-                for(var i in attrib){
-                    div+=i+'='+attrib[i]+' ';
-                }
-                if(css){
-                    div+='style="';
-                    for(var i in css){
-                        div+=i+':'+css[i]+';';
-                    }
-                    div+='"';
-                }
-                if(!content)
-                    content='';
-                div+='>'+content+'</div>';
-                return div;
-            }
         </script>
         
         <script>
