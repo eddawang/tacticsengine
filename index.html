@@ -7,78 +7,44 @@
         <script src='tile.js'></script>
         <script src='unit.js'></script>
         <script src='draw.js'></script>
+        <script src='clickHandlers.js'></script>
         <link rel="stylesheet" type="text/css" href="index.css">
     </head>
     
     <body>
         <div class='mapGrid'></div>
         <script>
-            var _selected;
-            var _selectedRange;
-            //Generate map
+            //Generate map here
             _genSquareMap(20,20,_map);
             _map["9,9"].terrain = 'blank';
-            _map["7,7"].terrain = 'asdf';
+            _map["10,9"].terrain = 'asdf';
+            ///////////////////
             
-            //Generate units
-            var unit1 = new unit('A');
-            var unit2 = new unit('B');
+            //Generate units here
+            var unit1 = new unit('A', {attack:10, movement:2});
+            var unit2 = new unit('B', {attack:3, attackRange:3});
+            var unit3 = new unit('C', {attackRange:2, movement:4, effectRange:2});
+            var unit4 = new unit('D');
+            var unit5 = new unit('E');
+            /////////////////////
             
             //Place units on map
             _placeUnit(unit1, 8,8, _map);
             _placeUnit(unit2, 10,10, _map);
+            _placeUnit(unit3, 7,8, _map);
+            _placeUnit(unit4, 9,11, _map);
+            _placeUnit(unit5, 12,8, _map);
+            ////////////////////
+            
+            
+            
             
             //Draw
             _drawMap('.mapGrid', _map);
             _drawUnits(_map);
-            
             //Clickers
-            $('.tile').on('click', function(e){
-                if(e.target == this){
-                    var tile = _map[e.target.id];
-                    if(_selected){
-                        var walk = e.target.attributes.getNamedItem('walk');
-                        if(walk){
-                            var unit = _selected;
-                            toggleSelectUnit(_selected);
-                            moveUnit(unit, tile);
-                        }
-                    }
-                }
-            });
-
-            $('.unit').on('click', function(e){
-                var unit = _map.units[e.target.id];
-                var tile = unit.tile;
-                var walkable = traverseRadial(4, tile, 0).tiles;
-                
-                toggleSelectUnit(unit, walkable);
-            });
-            
-            function toggleSelectUnit(unit, tileRange){
-                var s = unit.selected;
-                if(_selected){
-                    unsetRange(_selectedRange,'walk');
-                    _selected.selected = false;
-                    _selected = null;
-                    delete _selectedRange;
-                }
-                if(!s){
-                    setRange(tileRange, {walk:true});
-                    unit.selected = true;
-                    _selected = unit;
-                    _selectedRange = tileRange;
-                }
-            
-            }
-            
-            function moveUnit(unit, targetTile){
-                unit.tile.onTile = null;
-                unit.tile = targetTile;
-                targetTile.onTile = unit;
-                $('#'+unit.id).appendTo(idSelect(targetTile.loc));
-            }
-            
+            $('.tile').on('click', clickTile);
+            $('.unit').on('click', clickUnit);
         </script>
         
         <script>

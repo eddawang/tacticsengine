@@ -37,12 +37,36 @@ body{
 }
 
 .tile:hover:after{
-    content: var(--loc);
+    content: var(--loc);;
     z-index: 10;
 }
 
+.tile:hover{
+    border: 1px solid blue;
+}
+
 .tile[walk=true]{
-    background: yellow;
+    opacity: .6;
+}
+
+.tile[attack=true]:after{
+    display:inline-block;
+    content: 'x';
+    background: red;
+    opacity: .3;
+    width:100%;
+    height:100%;
+    z-index:10;
+}
+
+.tile[effect=true]:after{
+    display:inline-block;
+    content: 'x';
+    background: red;
+    opacity: .6;
+    width:100%;
+    height:100%;
+    z-index:10;
 }
 
 .unit{

@@ -152,6 +152,72 @@ function traverseCross(range, tile, target){
     return {tiles: tiles, onTiles: onTiles};
 }
 
+//Real traversal limited by walking only through allowed terrain up to range
+//  terrain should be a string containing all the allowable terrains
+//  e.g. "grass,lava,sand"
+//  used for walking ranges
+function trueTraverse(range, tile, terrain){
+    var tiles = {};
+    var onTiles = [];
+    
+    var boundary = [tile];
+    for(var i=0;i<range;i++){
+        var b = []; // Holds tiles to start search from for next iteration
+        //Searches out from each tile in boundary
+        for(var j in boundary){
+            var t = boundary[j];
+            //Search up
+            var nextTile = t.up;
+            //Check if tile meets criteria and whether already been searched
+            //  also makes sure it's not the starting target cell
+            if(nextTile && !tiles[nextTile.loc] && nextTile!=tile){
+                if(terrain.includes(nextTile.terrain)){
+                    tiles[nextTile.loc] = nextTile;
+                    b.push(nextTile); //saves tile for next iteration
+                    if(nextTile.onTile)
+                        onTiles.push(nextTile.onTile);
+                }
+            }
+            //Search down
+            nextTile = t.down;
+            if(nextTile && !tiles[nextTile.loc] && nextTile!=tile){
+                if(terrain.includes(nextTile.terrain)){
+                    tiles[nextTile.loc] = nextTile;
+                    b.push(nextTile); //saves tile for next iteration
+                    if(nextTile.onTile)
+                        onTiles.push(nextTile.onTile);
+                }
+            }
+            //Search Left
+            nextTile = t.left;
+            if(nextTile && !tiles[nextTile.loc] && nextTile!=tile){
+                if(terrain.includes(nextTile.terrain)){
+                    tiles[nextTile.loc] = nextTile;
+                    b.push(nextTile); //saves tile for next iteration
+                    if(nextTile.onTile)
+                        onTiles.push(nextTile.onTile);
+                }
+            }
+            //Search Right
+            nextTile = t.right;
+            if(nextTile && !tiles[nextTile.loc] && nextTile!=tile){
+                if(terrain.includes(nextTile.terrain)){
+                    tiles[nextTile.loc] = nextTile;
+                    b.push(nextTile); //saves tile for next iteration
+                    if(nextTile.onTile)
+                        onTiles.push(nextTile.onTile);
+                }
+            }
+        }
+        //Updates the boundary to new boundaries
+        boundary = b;
+    }
+    return {tiles: tiles, onTiles: onTiles};
+}
+
+
+//Typically should only be used for skill ranges
+// is not a true traversal but grabs the tiles efficiently
 function traverseRadial(range, tile, target){
     var tiles = [];
     var onTiles = [];
@@ -175,9 +241,12 @@ function traverseRadial(range, tile, target){
             part=false;
             
         while(dist--){
+            var l,r;
             //traverse horizontally as 'up' traverses upwards
-            var l = left.left;
-            var r = right.right;
+            if(left)
+                l = left.left;
+            if(right)
+                r = right.right;
             
             //traversal
             if(l){
@@ -193,11 +262,14 @@ function traverseRadial(range, tile, target){
                 right = r;
             }
             
+            l,r = undefined;
             //Checks if initial loop
             if(part){
                 //traverses horizontally as 'down' traverses downwards
-                l = left2.left;
-                r = right2.right;
+                if(left2)
+                    l = left2.left;
+                if(right2)
+                    r = right2.right;
             }else{
                 //traverses vertical column for initial loop
                 l = left2.up;
@@ -220,8 +292,10 @@ function traverseRadial(range, tile, target){
         }
         
         //traverses 'up' and 'down'
-        up = up.up;
-        down = down.down;
+        if(up)
+            up = up.up;
+        if(down)
+            down = down.down;
     }
     return {tiles: tiles, onTiles: onTiles};
 }
