@@ -1,6 +1,18 @@
+//Converts id into a selectable string for jquery
 function idSelect(text){
     return '#'+$.escapeSelector(text);
 }
+
+//Applies attributes to tiles in range
+function setRange(tileRange, attr){
+    for(var i in tileRange)
+        $(idSelect(tileRange[i].loc)).attr(attr);
+}
+function unsetRange(tileRange, attrName){
+    for(var i in tileRange)
+        $(idSelect(tileRange[i].loc)).removeAttr(attrName);
+}
+
 
 //Called once initially to create unit divs
 function _drawUnits(map){

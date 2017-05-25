@@ -13,7 +13,8 @@
     <body>
         <div class='mapGrid'></div>
         <script>
-        
+            var _selected;
+            var _selectedRange;
             //Generate map
             _genSquareMap(20,20,_map);
             _map["9,9"].terrain = 'blank';
@@ -35,7 +36,14 @@
             $('.tile').on('click', function(e){
                 if(e.target == this){
                     var tile = _map[e.target.id];
-                    console.log(tile);
+                    if(_selected){
+                        var walk = e.target.attributes.getNamedItem('walk');
+                        if(walk){
+                            var unit = _selected;
+                            toggleSelectUnit(_selected);
+                            moveUnit(unit, tile);
+                        }
+                    }
                 }
             });
 
@@ -44,16 +52,32 @@
                 var tile = unit.tile;
                 var walkable = traverseRadial(4, tile, 0).tiles;
                 
-                if(!unit.selected)
-                    unit.selected = true;
-                else
-                    unit.selected = false;
-                
-                for(var i in walkable){
-                    $(idSelect(walkable[i].loc)).attr('walk',unit.selected);
-                }
-                console.log(walkable);
+                toggleSelectUnit(unit, walkable);
             });
+            
+            function toggleSelectUnit(unit, tileRange){
+                var s = unit.selected;
+                if(_selected){
+                    unsetRange(_selectedRange,'walk');
+                    _selected.selected = false;
+                    _selected = null;
+                    delete _selectedRange;
+                }
+                if(!s){
+                    setRange(tileRange, {walk:true});
+                    unit.selected = true;
+                    _selected = unit;
+                    _selectedRange = tileRange;
+                }
+            
+            }
+            
+            function moveUnit(unit, targetTile){
+                unit.tile.onTile = null;
+                unit.tile = targetTile;
+                targetTile.onTile = unit;
+                $('#'+unit.id).appendTo(idSelect(targetTile.loc));
+            }
             
         </script>
         
