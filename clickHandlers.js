@@ -38,14 +38,10 @@ function toggleSelectUnit(attrName, unit, tileRange){
 
 //Moves unit to targeted Tile
 function moveUnit(unit, targetTile){
-    //Removes unit from old tile
-    unit.tile.onTile = null;
-    //Places unit on new tile
-    unit.tile = targetTile;
-    unit.hasWalked = true;
-    targetTile.onTile = unit;
-    //Moves unit div
-    $('#'+unit.id).appendTo(idSelect(targetTile.loc));
+    //Move unit
+    unit.walkTo(targetTile);
+    //Draw unit in new location
+    drawMoveUnit(unit.id, targetTile.loc);
 }
 
 
@@ -60,9 +56,8 @@ function clickTile(e){
     //Check if a unit is currently selected
     if(_selected){
         var walk = e.target.attributes.getNamedItem('walk');
-        //Check if tile is a walkable tile for selected unit
-        // i.e. in range && no other units on tile && grass tile
-        if(walk && !tile.onTile && tile.terrain=='grass'){
+        //Check if tile is a walkable tile i.e. highlighted
+        if(walk && !tile.onTile){
             var unit = _selected;
             toggleSelectUnit('walk', _selected);
             moveUnit(unit, tile);
@@ -88,6 +83,9 @@ function clickUnit(e){
                     if(t!=_selected)
                         _selected.attackUnit(_confirmRange.onTiles[i]);
                 }
+                //Update Graphics to show unit has finished turn
+                setUnitDivAttr(_selected.id, {hasAttacked:_selected.hasAttacked});
+                //Deselect unit
                 toggleSelectUnit('attack',_selected);
             }else{
                 //Show effect range and wait for confirmation click
@@ -113,6 +111,7 @@ function clickUnit(e){
     }
     
     //Check the units turn (i.e. walk or attack)
+    //Highlights corresponding tiles within range for walk/attack
     if(!unit.hasWalked){
         toggleSelectUnit('walk', unit, unit.moveableTiles());
     }else if(!unit.hasAttacked){

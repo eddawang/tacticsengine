@@ -1,10 +1,7 @@
-//Global Map variable
-var _map = {};
-_map.units = {};
-
-
 //Testing purposes
 //_genSquareMap(20,20,_map);
+var _map = {};
+_map.units = {};
 
 /*
 //Test performance of functions
@@ -156,7 +153,7 @@ function traverseCross(range, tile, target){
 //  terrain should be a string containing all the allowable terrains
 //  e.g. "grass,lava,sand"
 //  used for walking ranges
-function trueTraverse(range, tile, terrain){
+function trueTraverse(range, tile, terrain, team){
     var tiles = {};
     var onTiles = [];
     
@@ -171,7 +168,7 @@ function trueTraverse(range, tile, terrain){
             //Check if tile meets criteria and whether already been searched
             //  also makes sure it's not the starting target cell
             if(nextTile && !tiles[nextTile.loc] && nextTile!=tile){
-                if(terrain.includes(nextTile.terrain)){
+                if(terrain.includes(nextTile.terrain) && (!nextTile.onTile || nextTile.onTile.team == team)){//Checking criteria here
                     tiles[nextTile.loc] = nextTile;
                     b.push(nextTile); //saves tile for next iteration
                     if(nextTile.onTile)
@@ -181,7 +178,7 @@ function trueTraverse(range, tile, terrain){
             //Search down
             nextTile = t.down;
             if(nextTile && !tiles[nextTile.loc] && nextTile!=tile){
-                if(terrain.includes(nextTile.terrain)){
+                if(terrain.includes(nextTile.terrain) && (!nextTile.onTile || nextTile.onTile.team == team)){
                     tiles[nextTile.loc] = nextTile;
                     b.push(nextTile); //saves tile for next iteration
                     if(nextTile.onTile)
@@ -191,7 +188,7 @@ function trueTraverse(range, tile, terrain){
             //Search Left
             nextTile = t.left;
             if(nextTile && !tiles[nextTile.loc] && nextTile!=tile){
-                if(terrain.includes(nextTile.terrain)){
+                if(terrain.includes(nextTile.terrain) && (!nextTile.onTile || nextTile.onTile.team == team)){
                     tiles[nextTile.loc] = nextTile;
                     b.push(nextTile); //saves tile for next iteration
                     if(nextTile.onTile)
@@ -201,7 +198,7 @@ function trueTraverse(range, tile, terrain){
             //Search Right
             nextTile = t.right;
             if(nextTile && !tiles[nextTile.loc] && nextTile!=tile){
-                if(terrain.includes(nextTile.terrain)){
+                if(terrain.includes(nextTile.terrain) && (!nextTile.onTile || nextTile.onTile.team == team)){
                     tiles[nextTile.loc] = nextTile;
                     b.push(nextTile); //saves tile for next iteration
                     if(nextTile.onTile)

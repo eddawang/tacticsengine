@@ -1,3 +1,15 @@
+function drawMoveUnit(unitId, loc){
+    $('#'+unitId).appendTo(idSelect(loc));
+}
+
+function setUnitDivAttr(unitId, attr){
+    $('#'+unitId).attr(attr)
+}
+function resetUnitDivAttr(unitId, attrName){
+    $('#'+unitId).removeAttr(attrName);
+}
+
+
 //Converts id into a selectable string for jquery
 function idSelect(text){
     return '#'+$.escapeSelector(text);
@@ -13,14 +25,17 @@ function unsetRange(tileRange, attrName){
         $(idSelect(tileRange[i].loc)).removeAttr(attrName);
 }
 
-
+/////////////////////////////////////////////////////////
 //Called once initially to create unit divs
 function _drawUnits(map){
     for(var i in map.units){
         var u = map.units[i];
         var selector = idSelect(u.tile.loc);
-        var d = element('div',{class:'unit', id:"'"+u.id+"'"}, u.id);
+        var team = u.team==2?'enemy':u.team==1?'ally':'neutral';
+        var attrib = {class:'unit', id:"'"+u.id+"'", team:team};
+        var d = element('div',attrib, u.id);
         $(selector).append(d);
+        u.div = d;
     }
 }
 
@@ -34,6 +49,7 @@ function _drawMap(container, map){
         }
     }
 }
+////////////////////////////////////////////////////////
 
 //Creates div of Tile inside selected div
 function divTile(selector, tile){

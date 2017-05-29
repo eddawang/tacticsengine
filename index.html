@@ -8,32 +8,53 @@
         <script src='unit.js'></script>
         <script src='draw.js'></script>
         <script src='clickHandlers.js'></script>
+        <script src='turns.js'></script>
         <link rel="stylesheet" type="text/css" href="index.css">
     </head>
     
     <body>
         <div class='mapGrid'></div>
+        <div class='controller'>
+            <button onClick='endTeamTurn(1,_map);'>End Team1</button>
+            <button onClick='startTeamTurn(1,_map);'>Start Team1</button>
+            <button onClick='endTeamTurn(2,_map);'>End Team2</button>
+            <button onClick='startTeamTurn(2,_map);'>Start Team2</button>
+        </div>
         <script>
             //Generate map here
-            _genSquareMap(20,20,_map);
+            _genSquareMap(10,10,_map);
             _map["9,9"].terrain = 'blank';
-            _map["10,9"].terrain = 'asdf';
+            _map["0,0"].terrain = 'blank';
+            _map["0,9"].terrain = 'blank';
+            _map["9,0"].terrain = 'blank';
+            
+            _map["5,4"].terrain = 'water';
+            _map["6,5"].terrain = 'water';
+            _map["2,2"].terrain = 'water';
+            _map["2,3"].terrain = 'water';
+            _map["3,3"].terrain = 'water';
             ///////////////////
             
             //Generate units here
-            var unit1 = new unit('A', {attack:10, movement:2});
-            var unit2 = new unit('B', {attack:3, attackRange:3});
-            var unit3 = new unit('C', {attackRange:2, movement:4, effectRange:2});
-            var unit4 = new unit('D');
-            var unit5 = new unit('E');
+            var unit1 = new unit('WarA', {attack:4, defense:1}, 2);
+            var unit2 = new unit('BowB', {attack:4, movement:3, attackRange:2}, 2);
+            var unit3 = new unit('MageC', {attackRange:2, movement:1, attackRange:2, effectRange:2}, 2);
+            var unit4 = new unit('BerzD', {attack:10, movement:1, defense:1}, 2);
+            var unit5 = new unit('TankE', {hp:12, defense:2}, 2);
+            
+            var unit6 = new unit('ThfA', {attack:4, movement:4, hp:7}, 1);
+            var unit7 = new unit('FlyB', {moveableTerrain:'grass,water'}, 1);
             /////////////////////
             
             //Place units on map
-            _placeUnit(unit1, 8,8, _map);
-            _placeUnit(unit2, 10,10, _map);
-            _placeUnit(unit3, 7,8, _map);
-            _placeUnit(unit4, 9,11, _map);
-            _placeUnit(unit5, 12,8, _map);
+            _placeUnit(unit1, 6,0, _map);
+            _placeUnit(unit2, 8,0, _map);
+            _placeUnit(unit3, 7,0, _map);
+            _placeUnit(unit4, 8,1, _map);
+            _placeUnit(unit5, 7,1, _map);
+            
+            _placeUnit(unit6, 2,8, _map);
+            _placeUnit(unit7, 5,5, _map);
             ////////////////////
             
             
