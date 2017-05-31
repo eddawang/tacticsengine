@@ -9,6 +9,12 @@ function resetUnitDivAttr(unitId, attrName){
     $('#'+unitId).removeAttr(attrName);
 }
 
+function damageToast(unit, damage){
+    $('#'+unit.id).append(div({class:'toast'}, damage));
+    console.log(unit.id+":"+unit.hp+" hp left.");
+    setTimeout(function(){$('#'+unit.id+">.toast").remove()},1500);
+}
+
 
 //Converts id into a selectable string for jquery
 function idSelect(text){

@@ -1,6 +1,8 @@
 body{
     padding:0;
     margin:0;
+    user-select:none;
+    cursor: crosshair;
 }
 
 .mapGrid{
@@ -21,13 +23,13 @@ body{
 }
 
 .tile[terrain=grass]{
-    background: green;
+    background: forestgreen;
     background-position: right bottom;
     border: 1px solid black;
 }
 
 .tile[terrain=water]{
-    background: blue;
+    background: dodgerblue;
     border: 1px solid black;
 }
 
@@ -47,6 +49,7 @@ body{
 
 .tile[walk=true]{
     opacity: .6;
+    cursor: alias;
 }
 
 .tile[attack=true]:after{
@@ -77,6 +80,7 @@ body{
     border-radius: 50%;
     z-index: 20;
     background: yellow;
+    font-size: 12px;
 }
 
 .unit[team=ally]{
@@ -90,5 +94,24 @@ body{
 }
 
 .unit[hasattacked=true]{
-    opacity:.5;
+    background: none;
+}
+
+.toast{
+    animation: fadeToast 1.5s;
+    position: relative;
+    color: black;
+    font-size: 20px;
+    z-index: 100;
+}
+
+@keyframes fadeToast{
+    from {
+        bottom: 0;
+        opacity: 1;
+    }
+    to {
+        bottom: 30px;
+        opacity:.3;
+    }
 }

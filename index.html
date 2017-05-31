@@ -13,13 +13,14 @@
     </head>
     
     <body>
-        <div class='mapGrid'></div>
         <div class='controller'>
             <button onClick='endTeamTurn(1,_map);'>End Team1</button>
             <button onClick='startTeamTurn(1,_map);'>Start Team1</button>
             <button onClick='endTeamTurn(2,_map);'>End Team2</button>
             <button onClick='startTeamTurn(2,_map);'>Start Team2</button>
         </div>
+        
+        <div class='mapGrid'></div>
         <script>
             //Generate map here
             _genSquareMap(10,10,_map);
@@ -38,7 +39,7 @@
             //Generate units here
             var unit1 = new unit('WarA', {attack:4, defense:1}, 2);
             var unit2 = new unit('BowB', {attack:4, movement:3, attackRange:2}, 2);
-            var unit3 = new unit('MageC', {attackRange:2, movement:1, attackRange:2, effectRange:2}, 2);
+            var unit3 = new unit('MageC', {attackRange:2, movement:1, attackRange:2, effectRange:1}, 2);
             var unit4 = new unit('BerzD', {attack:10, movement:1, defense:1}, 2);
             var unit5 = new unit('TankE', {hp:12, defense:2}, 2);
             

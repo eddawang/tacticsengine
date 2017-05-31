@@ -46,10 +46,12 @@ function unit(id, stats, team){
     }
     
     unit.prototype.takeDamage = function(damage){
-        this.hp -= damage-this.defense;
+        var damageTaken = damage-this.defense;
+        this.hp -= damageTaken;
         if(this.hp < 0)
             this.hp = 0;
-        console.log(this.id+":"+this.hp+" hp left.");
+        //Draw damage toast
+        damageToast(this, damageTaken);
         this.checkDeath();
     }
     
