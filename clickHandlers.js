@@ -9,14 +9,10 @@ var _confirmRange;
 //Only one unit can be selected at a time
 function toggleSelectUnit(attrName, unit, tileRange){
     var s = unit.selected;
+
     //Deselect current selection
-    if(_selected){
-        unsetRange(_selectedRange, _selectedAttr);
-        _selected.selected = false;
-        _selected = null;
-        _selectedAttr = null;
-        delete _selectedRange;
-    }
+    deselectAll();
+
     //If targeted unit was not selected, select target
     if(!s){
         var attr = {};
@@ -36,8 +32,25 @@ function toggleSelectUnit(attrName, unit, tileRange){
     }
 }
 
+//Deselects the current selection
+function deselectAll() {
+    if (_selected) {
+        unsetRange(_selectedRange, _selectedAttr);
+        _selected.selected = false;
+        _selected = null;
+        _selectedAttr = null;
+        delete _selectedRange;
+    }
+}
+
 //Moves unit to targeted Tile
-function moveUnit(unit, targetTile){
+function moveUnit(unit, targetTile) {
+
+    var moveDistance = calcDistance(unit.tile, targetTile);
+
+    unit.curDelay += moveDistance * unit.moveDelay;
+    updateInfoDisplay(unit);
+
     //Move unit
     unit.walkTo(targetTile);
     //Draw unit in new location
