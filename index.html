@@ -25,11 +25,6 @@
         </div>
 
         <div id="delayQueue">Delay Queue: </div>
-
-        <div class="panel panel-default">
-          <div class="panel-heading">Current Unit Info:</div>
-          <div class="panel-body" id="unitInfo">N/A (Click "Next Unit" to start)</div>
-        </div>
         
         <div class='mapGrid'></div>
         <script>
@@ -76,8 +71,6 @@
             ////////////////////
             
             
-            
-            
             //Draw
             _drawMap('.mapGrid', _map);
             _drawUnits(_map);
@@ -85,6 +78,11 @@
             $('.tile').on('click', clickTile);
             $('.unit').on('click', clickUnit);
         </script>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">Current Unit Info:</div>
+          <div class="panel-body" id="unitInfo">N/A (Click "Next Unit" to start)</div>
+        </div>
         
         <script>
             
