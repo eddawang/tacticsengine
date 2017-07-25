@@ -18,7 +18,13 @@
             <button onClick='startTeamTurn(1,_map);'>Start Team1</button>
             <button onClick='endTeamTurn(2,_map);'>End Team2</button>
             <button onClick='startTeamTurn(2,_map);'>Start Team2</button>
+            <button onclick='nextUnitTurn();'>Next Unit</button>
+            <button onclick='currentUnitBasicAttack();'>Attack</button>
+            <button onclick='endUnitTurn();'>End Unit Turn</button>
+            
         </div>
+
+        <div id="delayQueue">Delay Queue: </div>
         
         <div class='mapGrid'></div>
         <script>
@@ -37,28 +43,32 @@
             ///////////////////
             
             //Generate units here
-            var unit1 = new unit('WarA', {attack:4, defense:1}, 2);
-            var unit2 = new unit('BowB', {attack:4, movement:3, attackRange:2}, 2);
-            var unit3 = new unit('MageC', {attackRange:2, movement:1, attackRange:2, effectRange:1}, 2);
-            var unit4 = new unit('BerzD', {attack:10, movement:1, defense:1}, 2);
-            var unit5 = new unit('TankE', {hp:12, defense:2}, 2);
+            var unitList = [];
+            unitList.push(new unit('WarA', { attack: 4, defense: 1, initDelay: 5 }, 2));
+            unitList.push(new unit('BowB', { attack: 4, movement: 3, attackRange: 2, initDelay: 4 }, 2));
+            unitList.push(new unit('MageC', { attackRange: 2, movement: 1, attackRange: 2, effectRange: 1, initDelay: 7 }, 2));
+            unitList.push(new unit('BerzD', { attack: 10, movement: 1, defense: 1, initDelay: 3 }, 2));
+            unitList.push(new unit('TankE', { hp: 12, defense: 2, initDelay: 6 }, 2));
             
-            var unit6 = new unit('ThfA', {attack:4, movement:4, hp:7}, 1);
-            var unit7 = new unit('FlyB', {moveableTerrain:'grass,water'}, 1);
+            unitList.push(new unit('ThfA', { attack: 4, movement: 4, hp: 7, initDelay: 1 }, 1));
+            unitList.push(new unit('FlyB', { moveableTerrain: 'grass,water', initDelay: 2 }, 1));
             /////////////////////
             
+            //Put units in turn queue
+            initTurnQueue(unitList);
+
+            /////////////////////
+
             //Place units on map
-            _placeUnit(unit1, 6,0, _map);
-            _placeUnit(unit2, 8,0, _map);
-            _placeUnit(unit3, 7,0, _map);
-            _placeUnit(unit4, 8,1, _map);
-            _placeUnit(unit5, 7,1, _map);
+            _placeUnit(unitList[0], 6, 0, _map);
+            _placeUnit(unitList[1], 8, 0, _map);
+            _placeUnit(unitList[2], 7, 0, _map);
+            _placeUnit(unitList[3], 8, 1, _map);
+            _placeUnit(unitList[4], 7, 1, _map);
             
-            _placeUnit(unit6, 2,8, _map);
-            _placeUnit(unit7, 5,5, _map);
+            _placeUnit(unitList[5], 2, 8, _map);
+            _placeUnit(unitList[6], 5, 5, _map);
             ////////////////////
-            
-            
             
             
             //Draw
@@ -68,6 +78,11 @@
             $('.tile').on('click', clickTile);
             $('.unit').on('click', clickUnit);
         </script>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">Current Unit Info:</div>
+          <div class="panel-body" id="unitInfo">N/A (Click "Next Unit" to start)</div>
+        </div>
         
         <script>
             

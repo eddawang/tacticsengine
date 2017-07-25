@@ -31,7 +31,9 @@ function _genSquareMap(width, height,map){
 
 
 // Tile Object
-function tile(x, y, terrain, map){
+function tile(x, y, terrain, map) {
+    this.x = x;
+    this.y = y;
     this.loc = getLoc(x,y);
     this.terrain = terrain;
     
@@ -295,4 +297,9 @@ function traverseRadial(range, tile, target){
             down = down.down;
     }
     return {tiles: tiles, onTiles: onTiles};
+}
+
+// calculate distance between two tiles
+function calcDistance(tile1, tile2) {
+    return Math.abs(tile1.x - tile2.x) + Math.abs(tile1.y - tile2.y)
 }

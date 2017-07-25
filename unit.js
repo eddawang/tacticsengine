@@ -1,13 +1,21 @@
 function unit(id, stats, team){
     this.id = id;
-    
-    this.hp = 10;
+
     this.attack = 3;
     this.defense = 0;
+
     this.movement = 2;
+    this.moveDelay = 20;
+
     this.attackRange = 1;
     this.effectRange = 0;
+    this.attackDelay = 40;
+
     this.moveableTerrain = "grass";
+
+    this.hp = 10;
+    this.initDelay = 0;
+    this.curDelay = this.initDelay;
     
     //0-neutral 1-ally 2-enemy
     this.team = 0;
@@ -43,6 +51,8 @@ function unit(id, stats, team){
         var damage = this.attack;
         unit.takeDamage(damage);
         this.hasAttacked = true;
+        this.curDelay += this.attackDelay;
+        updateInfoDisplay(this);
     }
     
     unit.prototype.takeDamage = function(damage){
